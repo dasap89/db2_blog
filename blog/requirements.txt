@@ -1,0 +1,7 @@
+Django==1.9
+django-appconf==1.0.2
+django-bootstrap-form==3.3
+django-user-accounts==2.0.3
+pinax-theme-bootstrap==8.0.1
+pinax-webanalytics==3.0.0
+pytz==2017.2
