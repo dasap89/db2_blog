@@ -31,7 +31,7 @@ How to install
 
         $ python manage.py loaddaata fixtures/data.json
 
-* Run application or go to "How to test":
+* Run application or go to "How to use":
 
         $ python manage.py runserver
 
