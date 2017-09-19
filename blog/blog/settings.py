@@ -38,12 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'rest_framework',
     'pinax_theme_bootstrap',
     'pinax.webanalytics',
     'bootstrapform',
     'account',
     'accounts',
     'posts',
+    'comments',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -133,6 +135,10 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'post_images')
+
+MEDIA_URL = '/post_images/'
 
 AUTH_USER_MODEL = 'accounts.User'
 

@@ -1,0 +1,114 @@
+{% load account_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block head_title %}Django Test Task{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://v4-alpha.getbootstrap.com/dist/css/bootstrap.min.css">
+
+
+  </head>
+
+
+<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/posts/">Posts</a>
+          </li>
+          
+        </ul>
+
+        <ul class="navbar-nav">
+          {% if request.user.is_authenticated %}
+              <li class="navbar-text">
+                  <i class="fa fa-user"></i> You are: {% user_display request.user %}
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'account_settings' %}"><i class="fa fa-cog"></i>Settings</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" id="account_logout" href="{% url 'account_logout' %}"><i class="fa fa-power-off"></i>Log out</a>
+              </li>
+          {% else %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">Log in</a></li>
+              {% if ACCOUNT_OPEN_SIGNUP %}
+                  <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}">Sign up</a></li>
+              {% endif %}
+          {% endif %}
+      </ul>
+
+      <form id="accountLogOutForm" style="display: none;" action="{% url 'account_logout' %}" method="POST">
+          {% csrf_token %}
+      </form>
+
+      </div>
+    </nav>
+
+    <div class="jumbotron">
+
+    <div class="container">
+      {% block content %}
+      {% endblock content %}
+    </div>
+
+
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+     $(document).ready(function(){
+          function updateText(btn, newCount, verb){
+          btn.text(newCount + " " + verb)
+      }
+      $(".like-btn").click(function(e){
+        e.preventDefault()
+        var this_ = $(this)
+        var likeUrl = this_.attr("data-href")
+        var likeCount = parseInt(this_.attr("data-likes")) | 0
+        console.log(likeCount)
+        var addLike = likeCount + 1
+        var removeLike = likeCount - 1
+        if (likeUrl){
+           $.ajax({
+            url: likeUrl,
+            method: "GET",
+            data: {},
+            success: function(data){
+              if (data.liked){
+                  updateText(this_, addLike, "Unlike")
+                  this_.attr("data-likes", addLike)
+              } else {
+                  updateText(this_, removeLike, "Like")
+                  this_.attr("data-likes", removeLike)
+              }
+            }, error: function(error){
+              console.log(error)
+              console.log("error")
+            }
+          })
+        }
+       
+      })
+  })
+    </script>
+{% endblock %}
+
+    <script>
+    $(document).ready(function(){
+      {% block jquery %}{% endblock %}
+    })
+    </script>
+  </body>
+</html>

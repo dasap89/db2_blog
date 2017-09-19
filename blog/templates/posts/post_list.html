@@ -1,8 +1,44 @@
-<h1>Articles</h1>
-<ul>
-{% for post in object_list %}
-    <li><a href="/posts/{{ post.id }}">{{ post.title }}</a></li>
-{% empty %}
-    <li>No posts yet.</li>
-{% endfor %}
+{% extends "base.html" %}
+
+
+{% block content %}
+    <h1>Articles</h1>
+      <div class="row">       
+        {% for post in object_list %}
+        <div class="col-md-4">
+          <h2>{{ post.title }}</h2>
+          <p>{{ post.body|truncatechars:100 }}...</p>
+          <p><a class="btn btn-secondary" href="/posts/{{ post.id }}" role="button">View post &raquo;</a></p>
+        </div>
+        {% empty %}
+            <div class="col-md-4">
+                <h2>No posts yet.</h2>
+            </div>
+        {% endfor %}
+      </div>
+
 </ul>
+{% if is_paginated %}
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="/posts?page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% endif %}
+        {% for page in page_obj.paginator.page_range %}
+            {% if page.number == page_obj.number %}
+              <span class="page-link">
+                {{ page }}
+                <span class="sr-only">(current)</span>
+              </span>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="/posts?page={{ page }}">{{ page }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="/posts?page={{ page_obj.next_page_number }}">Next</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+{% endif %}
+
+{% endblock %}
